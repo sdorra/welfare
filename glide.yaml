@@ -1,0 +1,7 @@
+package: github.com/sdorra/welfare
+import:
+- package: github.com/pkg/errors
+  version: v0.8.0
+testImport:
+- package: github.com/stretchr/testify
+  version: v1.2.0
