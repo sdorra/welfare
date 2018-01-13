@@ -9,7 +9,7 @@ It is very much inspired by [Ansible](https://www.ansible.com/), but Welfare is 
 ## Usage
 
 ```go
-copy := modules.NewCopyModule("files/issue", "/etc/issue")
+copy := files.NewCopyModule("files/issue", "/etc/issue")
 copy.FileMode = 0644
 changed, _ := copy.Run()
 if changed {

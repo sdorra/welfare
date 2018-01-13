@@ -1,4 +1,4 @@
-package modules
+package welfare
 
 // Module represents a single declarative module
 type Module interface {

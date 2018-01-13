@@ -1,4 +1,4 @@
-package modules_test
+package files_test
 
 import (
 	"io/ioutil"
@@ -6,7 +6,7 @@ import (
 	"path"
 	"testing"
 
-	"github.com/sdorra/welfare/modules"
+	"github.com/sdorra/welfare/files"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -23,7 +23,7 @@ func TestCopyModule_Run(t *testing.T) {
 	err = ioutil.WriteFile(target, []byte("b"), 0644)
 	require.Nil(t, err)
 
-	copy := modules.NewCopyModule(source, target)
+	copy := files.NewCopyModule(source, target)
 
 	changed, err := copy.Run()
 	assert.Nil(t, err)
@@ -42,7 +42,7 @@ func TestCopyModule_RunWithEqualContent(t *testing.T) {
 	err = ioutil.WriteFile(target, []byte("a"), 0644)
 	require.Nil(t, err)
 
-	copy := modules.NewCopyModule(source, target)
+	copy := files.NewCopyModule(source, target)
 
 	changed, err := copy.Run()
 	assert.Nil(t, err)
@@ -61,7 +61,7 @@ func TestCopyModule_RunWithChangedPermissionsFromSource(t *testing.T) {
 	err = ioutil.WriteFile(target, []byte("a"), 0755)
 	require.Nil(t, err)
 
-	copy := modules.NewCopyModule(source, target)
+	copy := files.NewCopyModule(source, target)
 
 	changed, err := copy.Run()
 	assert.Nil(t, err)
@@ -84,7 +84,7 @@ func TestCopyModule_RunWithChangedPermissions(t *testing.T) {
 	err = ioutil.WriteFile(target, []byte("a"), 0755)
 	require.Nil(t, err)
 
-	copy := modules.NewCopyModule(source, target)
+	copy := files.NewCopyModule(source, target)
 	copy.FileMode = 0644
 
 	changed, err := copy.Run()
@@ -106,7 +106,7 @@ func TestCopyModule_RunWithoutTarget(t *testing.T) {
 
 	target := path.Join(dir, "target")
 
-	copy := modules.NewCopyModule(source, target)
+	copy := files.NewCopyModule(source, target)
 
 	changed, err := copy.Run()
 	assert.Nil(t, err)
@@ -123,7 +123,7 @@ func TestCopyModule_RunWithoutSource(t *testing.T) {
 	err = ioutil.WriteFile(target, []byte("a"), 0644)
 	require.Nil(t, err)
 
-	copy := modules.NewCopyModule(source, target)
+	copy := files.NewCopyModule(source, target)
 
 	_, err = copy.Run()
 	assert.Error(t, err)

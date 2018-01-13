@@ -1,11 +1,11 @@
-package modules_test
+package files_test
 
 import (
 	"io/ioutil"
 	"path"
 	"testing"
 
-	"github.com/sdorra/welfare/modules"
+	"github.com/sdorra/welfare/files"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -16,7 +16,7 @@ func TestTemplateModule_Run(t *testing.T) {
 
 	target := path.Join(dir, "target")
 
-	tpl := modules.NewTemplateModule(target, "Hello My Name is {{.Name}}", &Context{"sorbot"})
+	tpl := files.NewTemplateModule(target, "Hello My Name is {{.Name}}", &Context{"sorbot"})
 
 	changed, err := tpl.Run()
 	assert.Nil(t, err)

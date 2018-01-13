@@ -1,4 +1,4 @@
-package modules_test
+package files_test
 
 import (
 	"io/ioutil"
@@ -7,7 +7,7 @@ import (
 
 	"os"
 
-	"github.com/sdorra/welfare/modules"
+	"github.com/sdorra/welfare/files"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -18,7 +18,7 @@ func TestContentModule_Run(t *testing.T) {
 
 	target := path.Join(dir, "target")
 
-	content := modules.NewContentModule(target, "Hello My Name is")
+	content := files.NewContentModule(target, "Hello My Name is")
 
 	changed, err := content.Run()
 	assert.Nil(t, err)
@@ -37,7 +37,7 @@ func TestContentModule_RunWithEqualContent(t *testing.T) {
 	err = ioutil.WriteFile(target, []byte("Hello My Name is"), 0644)
 	require.Nil(t, err)
 
-	content := modules.NewContentModule(target, "Hello My Name is")
+	content := files.NewContentModule(target, "Hello My Name is")
 
 	changed, err := content.Run()
 	assert.Nil(t, err)
@@ -52,7 +52,7 @@ func TestContentModule_RunWithOtherContent(t *testing.T) {
 	err = ioutil.WriteFile(target, []byte("Hi My Name is."), 0644)
 	require.Nil(t, err)
 
-	content := modules.NewContentModule(target, "Hello My Name is")
+	content := files.NewContentModule(target, "Hello My Name is")
 
 	changed, err := content.Run()
 	assert.Nil(t, err)
@@ -71,7 +71,7 @@ func TestContentModule_RunWithWrongPermissions(t *testing.T) {
 	err = ioutil.WriteFile(target, []byte("Hello My Name is"), 0777)
 	require.Nil(t, err)
 
-	content := modules.NewContentModule(target, "Hello My Name is")
+	content := files.NewContentModule(target, "Hello My Name is")
 
 	changed, err := content.Run()
 	assert.Nil(t, err)
