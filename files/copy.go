@@ -32,8 +32,8 @@ func (module *CopyModule) Run() (bool, error) {
 		return false, err
 	}
 
-	if !expected.Exists {
-		return false, errors.Errorf("expected file %s does not exists", module.Source)
+	if expected.State != File {
+		return false, errors.Errorf("expected file %s seams to be not a file", module.Source)
 	}
 
 	target, err := collectFileInfo(module.Target)
@@ -46,7 +46,7 @@ func (module *CopyModule) Run() (bool, error) {
 
 func ensureCopy(expected, target fileInfo) (bool, error) {
 	contentChanged := false
-	if !target.Exists || expected.Checksum != target.Checksum {
+	if target.State == Absent || expected.Checksum != target.Checksum {
 		err := copy(expected, target)
 		if err != nil {
 			return false, err
@@ -93,7 +93,7 @@ func copy(expected, target fileInfo) error {
 	}
 
 	var targetFile *os.File
-	if !target.Exists {
+	if target.State == Absent {
 		targetFile, err = os.Create(targetPath)
 		if err != nil {
 			return errors.Wrapf(err, "failed to create file at %s", targetPath)

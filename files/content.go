@@ -48,7 +48,7 @@ func (module *ContentModule) Run() (bool, error) {
 
 func ensureContent(target fileInfo, content string, mode os.FileMode) (bool, error) {
 	bytes := []byte(content)
-	if target.Exists {
+	if target.State == File {
 		hashAlg := createHashAlg()
 		_, err := hashAlg.Write(bytes)
 		if err != nil {
@@ -62,12 +62,14 @@ func ensureContent(target fileInfo, content string, mode os.FileMode) (bool, err
 			}
 			return true, nil
 		}
-	} else {
+	} else if target.State == Absent {
 		err := ioutil.WriteFile(target.Path, bytes, mode)
 		if err != nil {
 			return false, errors.Wrapf(err, "failed to write content to %s", target.Path)
 		}
 		return true, nil
+	} else {
+		return false, errors.Errorf("%s seams to be not a regular file", target.Path)
 	}
 	return false, nil
 }

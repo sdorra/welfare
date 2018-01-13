@@ -14,10 +14,24 @@ import (
 	"github.com/pkg/errors"
 )
 
+// State represents the state of a file
+type State int
+
+const (
+	// File represents a normal file
+	File = iota
+	// Directory represents a directory
+	Directory
+	// Link represents a symbolic link
+	Link
+	// Absent represents the absent of the path
+	Absent
+)
+
 type fileInfo struct {
 	permissions
 	Path     string
-	Exists   bool
+	State    State
 	Checksum string
 }
 
@@ -41,13 +55,18 @@ func collectFileInfo(path string) (fileInfo, error) {
 	stat, err := os.Stat(path)
 	if err != nil {
 		if os.IsNotExist(err) {
-			file.Exists = false
+			file.State = Absent
 			return file, nil
 		}
 		return file, errors.Wrapf(err, "failed to stat %s", path)
 	}
 
-	file.Exists = true
+	if stat.IsDir() {
+		file.State = Directory
+	} else {
+		file.State = File
+	}
+
 	file.FileMode = stat.Mode()
 	sysStat, cast := stat.Sys().(*syscall.Stat_t)
 	if !cast {
