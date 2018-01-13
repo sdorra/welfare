@@ -15,7 +15,7 @@ func TestPackageModule_Run(t *testing.T) {
 
 	module := PackageModule{
 		Package: "htop",
-		State:   StatePresent,
+		State:   Present,
 		system:  system,
 	}
 
@@ -35,7 +35,7 @@ func TestPackageModule_RunAlreadyInstalled(t *testing.T) {
 
 	module := PackageModule{
 		Package: "htop",
-		State:   StatePresent,
+		State:   Present,
 		system:  system,
 	}
 
@@ -53,7 +53,7 @@ func TestPackageModule_RunAlreadyUninstall(t *testing.T) {
 
 	module := PackageModule{
 		Package: "htop",
-		State:   StateAbsent,
+		State:   Absent,
 		system:  system,
 	}
 
@@ -73,7 +73,7 @@ func TestPackageModule_RunAlreadyUninstalled(t *testing.T) {
 
 	module := PackageModule{
 		Package: "htop",
-		State:   StateAbsent,
+		State:   Absent,
 		system:  system,
 	}
 

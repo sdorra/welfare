@@ -4,10 +4,10 @@ package packages
 type State int
 
 const (
-	// StatePresent ensures that the package is installed
-	StatePresent = iota
-	// StateAbsent ensures that the package is not installed
-	StateAbsent
+	// Present ensures that the package is installed
+	Present = iota
+	// Absent ensures that the package is not installed
+	Absent
 )
 
 // PackageModule ensures the state of a package
@@ -21,13 +21,13 @@ func (module *PackageModule) Run() (bool, error) {
 	pkgInfo := module.system.GetInfo(module.Package)
 
 	changed := false
-	if module.State == StatePresent && !pkgInfo.Installed {
+	if module.State == Present && !pkgInfo.Installed {
 		err := module.system.Install(module.Package)
 		if err != nil {
 			return false, err
 		}
 		changed = true
-	} else if module.State == StateAbsent && pkgInfo.Installed {
+	} else if module.State == Absent && pkgInfo.Installed {
 		err := module.system.Uninstall(module.Package)
 		if err != nil {
 			return false, err

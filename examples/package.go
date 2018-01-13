@@ -17,9 +17,9 @@ func main() {
 	action := os.Args[1]
 	var state packages.State
 	if action == "present" {
-		state = packages.StatePresent
+		state = packages.Present
 	} else if action == "absent" {
-		state = packages.StateAbsent
+		state = packages.Absent
 	} else {
 		fmt.Printf("unknown action: %s\n", action)
 	}
