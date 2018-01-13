@@ -1,8 +1,7 @@
 # Welfare
 
-Is a library for the execution of declarative tasks. 
-It is massive inspired by [Ansible](https://www.ansible.com/).
-But Welfare is designed to be used as embedded component in other applications.
+Welfare is a library for the execution of declarative tasks. 
+It is very much inspired by [Ansible](https://www.ansible.com/), but Welfare is designed to be used as embedded component in other applications.
 
 ## Usage
 
