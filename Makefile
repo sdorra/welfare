@@ -1,3 +1,5 @@
+.DEFAULT_GOAL := all
+
 .PHONY: dependencies
 dependencies:
 	glide install
@@ -9,3 +11,6 @@ test:
 .PHONY: lint
 lint:
 	gometalinter --vendor ./...
+
+.PHONY: all
+all: dependencies test
