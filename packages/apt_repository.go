@@ -16,6 +16,7 @@ import (
 	"github.com/pkg/errors"
 )
 
+// NewAptRepositoryModule creates a new module for managing apt repositories
 func NewAptRepositoryModule(name string, state State) *AptRepositoryModule {
 	return &AptRepositoryModule{
 		Name:      name,
@@ -24,6 +25,7 @@ func NewAptRepositoryModule(name string, state State) *AptRepositoryModule {
 	}
 }
 
+// AptRepositoryModule is able to handle state of apt repositories
 type AptRepositoryModule struct {
 	Name       string
 	Repository string
