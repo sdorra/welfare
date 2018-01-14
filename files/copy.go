@@ -62,27 +62,6 @@ func ensureCopy(expected, target fileInfo) (bool, error) {
 	return contentChanged || permissionsChanged, nil
 }
 
-func ensurePermissions(expected permissions, target fileInfo) (bool, error) {
-	modeChanged := false
-	if expected.FileMode != target.FileMode {
-		err := os.Chmod(target.Path, expected.FileMode)
-		if err != nil {
-			return false, errors.Wrapf(err, "failed to change mode of %s", target.Path)
-		}
-		modeChanged = true
-	}
-
-	ownershipChanged := false
-	if expected.UID != target.UID || expected.GID != target.GID {
-		err := os.Chown(target.Path, expected.UID, expected.GID)
-		if err != nil {
-			return false, errors.Wrapf(err, "failed to change mode of %s", target.Path)
-		}
-		ownershipChanged = true
-	}
-	return modeChanged || ownershipChanged, nil
-}
-
 func copy(expected, target fileInfo) error {
 	sourcePath := expected.Path
 	targetPath := target.Path

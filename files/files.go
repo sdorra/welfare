@@ -1,6 +1,7 @@
 package files
 
 import (
+	"io/ioutil"
 	"os"
 	"syscall"
 
@@ -22,8 +23,6 @@ const (
 	File = iota
 	// Directory represents a directory
 	Directory
-	// Link represents a symbolic link
-	Link
 	// Absent represents the absent of the path
 	Absent
 )
@@ -65,9 +64,16 @@ func collectFileInfo(path string) (fileInfo, error) {
 		file.State = Directory
 	} else {
 		file.State = File
+
+		hash, err := checksum(path)
+		if err != nil {
+			return file, err
+		}
+
+		file.Checksum = hash
 	}
 
-	file.FileMode = stat.Mode()
+	file.FileMode = stat.Mode().Perm()
 	sysStat, cast := stat.Sys().(*syscall.Stat_t)
 	if !cast {
 		return file, errors.New("stat not of type syscall.Stat_t")
@@ -75,13 +81,6 @@ func collectFileInfo(path string) (fileInfo, error) {
 
 	file.UID = int(sysStat.Uid)
 	file.GID = int(sysStat.Gid)
-
-	hash, err := checksum(path)
-	if err != nil {
-		return file, err
-	}
-
-	file.Checksum = hash
 
 	return file, nil
 }
@@ -123,4 +122,53 @@ func createHashAlg() hash.Hash {
 
 func hashToString(hashAlg hash.Hash) string {
 	return fmt.Sprintf("%x", hashAlg.Sum(nil))
+}
+
+func ensureContent(target fileInfo, content string, mode os.FileMode) (bool, error) {
+	bytes := []byte(content)
+	if target.State == File {
+		hashAlg := createHashAlg()
+		_, err := hashAlg.Write(bytes)
+		if err != nil {
+			return false, errors.Wrap(err, "failed to create checksum for content")
+		}
+		hash := hashToString(hashAlg)
+		if hash != target.Checksum {
+			err := ioutil.WriteFile(target.Path, bytes, mode)
+			if err != nil {
+				return false, errors.Wrapf(err, "failed to overwrite content of %s", target.Path)
+			}
+			return true, nil
+		}
+	} else if target.State == Absent {
+		err := ioutil.WriteFile(target.Path, bytes, mode)
+		if err != nil {
+			return false, errors.Wrapf(err, "failed to write content to %s", target.Path)
+		}
+		return true, nil
+	} else {
+		return false, errors.Errorf("%s seams to be not a regular file", target.Path)
+	}
+	return false, nil
+}
+
+func ensurePermissions(expected permissions, target fileInfo) (bool, error) {
+	modeChanged := false
+	if expected.FileMode != target.FileMode {
+		err := os.Chmod(target.Path, expected.FileMode)
+		if err != nil {
+			return false, errors.Wrapf(err, "failed to change mode of %s", target.Path)
+		}
+		modeChanged = true
+	}
+
+	ownershipChanged := false
+	if expected.UID != target.UID || expected.GID != target.GID {
+		err := os.Chown(target.Path, expected.UID, expected.GID)
+		if err != nil {
+			return false, errors.Wrapf(err, "failed to change mode of %s", target.Path)
+		}
+		ownershipChanged = true
+	}
+	return modeChanged || ownershipChanged, nil
 }
