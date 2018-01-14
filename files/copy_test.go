@@ -14,6 +14,7 @@ import (
 func TestCopyModule_Run(t *testing.T) {
 	dir, err := ioutil.TempDir("", "copy")
 	require.Nil(t, err)
+	defer os.RemoveAll(dir)
 
 	source := path.Join(dir, "source")
 	err = ioutil.WriteFile(source, []byte("a"), 0644)
@@ -33,6 +34,7 @@ func TestCopyModule_Run(t *testing.T) {
 func TestCopyModule_RunWithEqualContent(t *testing.T) {
 	dir, err := ioutil.TempDir("", "copy")
 	require.Nil(t, err)
+	defer os.RemoveAll(dir)
 
 	source := path.Join(dir, "source")
 	err = ioutil.WriteFile(source, []byte("a"), 0644)
@@ -52,6 +54,7 @@ func TestCopyModule_RunWithEqualContent(t *testing.T) {
 func TestCopyModule_RunWithChangedPermissionsFromSource(t *testing.T) {
 	dir, err := ioutil.TempDir("", "copy")
 	require.Nil(t, err)
+	defer os.RemoveAll(dir)
 
 	source := path.Join(dir, "source")
 	err = ioutil.WriteFile(source, []byte("a"), 0644)
@@ -75,6 +78,7 @@ func TestCopyModule_RunWithChangedPermissionsFromSource(t *testing.T) {
 func TestCopyModule_RunWithChangedPermissions(t *testing.T) {
 	dir, err := ioutil.TempDir("", "copy")
 	require.Nil(t, err)
+	defer os.RemoveAll(dir)
 
 	source := path.Join(dir, "source")
 	err = ioutil.WriteFile(source, []byte("a"), 0755)
@@ -99,6 +103,7 @@ func TestCopyModule_RunWithChangedPermissions(t *testing.T) {
 func TestCopyModule_RunWithoutTarget(t *testing.T) {
 	dir, err := ioutil.TempDir("", "copy")
 	require.Nil(t, err)
+	defer os.RemoveAll(dir)
 
 	source := path.Join(dir, "source")
 	err = ioutil.WriteFile(source, []byte("a"), 0644)
@@ -116,6 +121,7 @@ func TestCopyModule_RunWithoutTarget(t *testing.T) {
 func TestCopyModule_RunWithoutSource(t *testing.T) {
 	dir, err := ioutil.TempDir("", "copy")
 	require.Nil(t, err)
+	defer os.RemoveAll(dir)
 
 	source := path.Join(dir, "source")
 

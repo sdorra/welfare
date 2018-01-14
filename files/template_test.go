@@ -2,6 +2,7 @@ package files_test
 
 import (
 	"io/ioutil"
+	"os"
 	"path"
 	"testing"
 
@@ -13,6 +14,7 @@ import (
 func TestTemplateModule_Run(t *testing.T) {
 	dir, err := ioutil.TempDir("", "template")
 	require.Nil(t, err)
+	defer os.RemoveAll(dir)
 
 	target := path.Join(dir, "target")
 

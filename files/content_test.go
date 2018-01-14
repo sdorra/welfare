@@ -15,6 +15,7 @@ import (
 func TestContentModule_Run(t *testing.T) {
 	dir, err := ioutil.TempDir("", "copy")
 	require.Nil(t, err)
+	defer os.RemoveAll(dir)
 
 	target := path.Join(dir, "target")
 
@@ -32,6 +33,7 @@ func TestContentModule_Run(t *testing.T) {
 func TestContentModule_RunWithEqualContent(t *testing.T) {
 	dir, err := ioutil.TempDir("", "copy")
 	require.Nil(t, err)
+	defer os.RemoveAll(dir)
 
 	target := path.Join(dir, "target")
 	err = ioutil.WriteFile(target, []byte("Hello My Name is"), 0644)
@@ -47,6 +49,7 @@ func TestContentModule_RunWithEqualContent(t *testing.T) {
 func TestContentModule_RunWithOtherContent(t *testing.T) {
 	dir, err := ioutil.TempDir("", "copy")
 	require.Nil(t, err)
+	defer os.RemoveAll(dir)
 
 	target := path.Join(dir, "target")
 	err = ioutil.WriteFile(target, []byte("Hi My Name is."), 0644)
@@ -66,6 +69,7 @@ func TestContentModule_RunWithOtherContent(t *testing.T) {
 func TestContentModule_RunWithWrongPermissions(t *testing.T) {
 	dir, err := ioutil.TempDir("", "copy")
 	require.Nil(t, err)
+	defer os.RemoveAll(dir)
 
 	target := path.Join(dir, "target")
 	err = ioutil.WriteFile(target, []byte("Hello My Name is"), 0777)
